@@ -16,7 +16,9 @@ public class QuickCartApp {
         while(true)
         {
             try {
-            	System.out.println("hiii and byeee");
+            	
+            	
+            	
 
                 System.out.println(
                         "\n********* WELCOME TO QUICKCART *********"
