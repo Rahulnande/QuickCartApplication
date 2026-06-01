@@ -7,17 +7,16 @@ import service.AuthService;
 
 public class QuickCartApp {
 
-    static Scanner sc =
-            new Scanner(System.in);
+    static Scanner sc =new Scanner(System.in);
 
-    static AuthService authService =
-            new AuthService();
+    static AuthService authService =new AuthService();
 
     public static void main(String[] args) {
 
         while(true)
         {
             try {
+            	System.out.println("hiii");
 
                 System.out.println(
                         "\n********* WELCOME TO QUICKCART *********"
@@ -47,10 +46,7 @@ public class QuickCartApp {
                         "Enter Choice : "
                 );
 
-                int choice =
-                        Integer.parseInt(
-                                sc.nextLine()
-                        );
+                int choice =Integer.parseInt(sc.nextLine());
 
                 switch(choice)
                 {
@@ -61,8 +57,7 @@ public class QuickCartApp {
 
                     case 2:
 
-                        User loggedInUser =
-                                authService.login();
+                        User loggedInUser = authService.login();
 
                         if(loggedInUser != null)
                         {
