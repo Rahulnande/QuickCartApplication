@@ -1,7 +1,7 @@
 package main;
 
 import java.util.Scanner;
-
+import service.ProductService;
 import model.User;
 import service.AuthService;
 
@@ -9,8 +9,16 @@ public class QuickCartApp {
 
     static Scanner sc =new Scanner(System.in);
 
-    static AuthService authService =new AuthService();
+    //static AuthService authService =new AuthService();
 
+    static AuthService authService =
+            new AuthService(sc);
+    
+    static ProductService
+    productService =
+    new ProductService(sc);
+    
+    
     public static void main(String[] args) {
 
         while(true)
@@ -130,11 +138,19 @@ public class QuickCartApp {
             );
 
             System.out.println(
-                    "3. Manage Orders"
+                    "3. Update Product"
+            );
+            
+            System.out.println(
+                    "4. Delete Product"
             );
 
             System.out.println(
-                    "4. Logout"
+                    "5. Manage Orders"
+            );
+
+            System.out.println(
+                    "6. Logout"
             );
 
             System.out.print(
@@ -148,31 +164,34 @@ public class QuickCartApp {
 
             switch(choice)
             {
-                case 1:
-                    System.out.println(
-                            "Add Product Logic"
-                    );
-                    break;
+            case 1:
+                productService.addProduct();
+                break;
 
-                case 2:
-                    System.out.println(
-                            "View Product Logic"
-                    );
-                    break;
+            case 2:
+                productService.viewProducts();
+                break;
 
-                case 3:
-                    System.out.println(
-                            "Manage Orders Logic"
-                    );
-                    break;
+            case 3:
+                productService.updateProduct();
+                break;
 
-                case 4:
-                    System.out.println(
-                            "Admin Logout Successful"
-                    );
-                    return;
+            case 4:
+                productService.deleteProduct();
+                break;
+
+            case 5:
+                productService.manageOrders();
+                break;
+
+            case 6:
+                System.out.println(
+                        "Admin Logout Successful"
+                );
+                return;
 
                 default:
+
                     System.out.println(
                             "Invalid Choice"
                     );
@@ -182,106 +201,135 @@ public class QuickCartApp {
 
     // ================= CUSTOMER MENU =================
 
-    public static void customerMenu(
-            User user)
+ public static void customerMenu(
+        User user)
+{
+    while(true)
     {
-        while(true)
+        System.out.println(
+                "\n========= CUSTOMER PANEL ========="
+        );
+
+        System.out.println(
+                "Welcome : "
+                + user.getFullName()
+        );
+
+        System.out.println(
+                "1. View Products"
+        );
+
+        System.out.println(
+                "2. Add To Cart"
+        );
+
+        System.out.println(
+                "3. View Cart"
+        );
+
+        System.out.println(
+                "4. Buy Product"
+        );
+
+        System.out.println(
+                "5. Order History"
+        );
+
+        System.out.println(
+                "6. Cancel Order"
+        );
+
+        System.out.println(
+                "7. Return Order"
+        );
+
+        System.out.println(
+                "8. Track Order"
+        );
+        System.out.println(
+                "9. Logout"
+        );
+
+        System.out.print(
+                "Enter Choice : "
+        );
+
+        int choice =
+                Integer.parseInt(
+                        sc.nextLine()
+                );
+
+        switch(choice)
         {
-            System.out.println(
-                    "\n========= CUSTOMER PANEL ========="
-            );
+            case 1:
 
-            System.out.println(
-                    "Welcome : "
-                    + user.getFullName()
-            );
+                productService
+                        .viewProducts();
 
-            System.out.println(
-                    "1. View Products"
-            );
+                break;
 
-            System.out.println(
-                    "2. Add To Cart"
-            );
+            case 2:
 
-            System.out.println(
-                    "3. Buy Product"
-            );
+                productService
+                        .addToCart();
 
-            System.out.println(
-                    "4. Order History"
-            );
+                break;
 
-            System.out.println(
-                    "5. Cancel Order"
-            );
+            case 3:
 
-            System.out.println(
-                    "6. Return Order"
-            );
+                productService
+                        .viewCart();
 
-            System.out.println(
-                    "7. Logout"
-            );
+                break;
 
-            System.out.print(
-                    "Enter Choice : "
-            );
+            case 4:
 
-            int choice =
-                    Integer.parseInt(
-                            sc.nextLine()
-                    );
+                productService
+                        .buyProduct();
 
-            switch(choice)
-            {
-                case 1:
-                    System.out.println(
-                            "View Product Logic"
-                    );
-                    break;
+                break;
 
-                case 2:
-                    System.out.println(
-                            "Add To Cart Logic"
-                    );
-                    break;
+            case 5:
 
-                case 3:
-                    System.out.println(
-                            "Buy Product Logic"
-                    );
-                    break;
+                productService
+                        .viewOrders();
 
-                case 4:
-                    System.out.println(
-                            "Order History Logic"
-                    );
-                    break;
+                break;
 
-                case 5:
-                    System.out.println(
-                            "Cancel Order Logic"
-                    );
-                    break;
+            case 6:
 
-                case 6:
-                    System.out.println(
-                            "Return Order Logic"
-                    );
-                    break;
+            	productService
+                .cancelOrder();
+        break;
 
-                case 7:
-                    System.out.println(
-                            "Customer Logout Successful"
-                    );
-                    return;
+            case 7:
 
-                default:
-                    System.out.println(
-                            "Invalid Choice"
-                    );
-            }
+            	productService
+                .returnOrder();
+
+        break;
+
+            case 8:
+
+                productService
+                        .trackOrder();
+
+                break;
+
+            case 9:
+
+                System.out.println(
+                        "Customer Logout Successful"
+                );
+
+                return;
+
+            default:
+
+                System.out.println(
+                        "Invalid Choice"
+                );
         }
     }
+}
 }

@@ -1,11 +1,8 @@
-
 package service;
 
 import java.io.Console;
 import java.util.ArrayList;
 import java.util.Scanner;
-import javax.swing.*;
-
 
 import model.Admin;
 import model.Customer;
@@ -15,7 +12,12 @@ import util.ValidationUtil;
 
 public class AuthService {
 
-    Scanner sc = new Scanner(System.in);
+    private Scanner sc;
+
+    public AuthService(Scanner sc)
+    {
+        this.sc = sc;
+    }
 
     ArrayList<User> userList =
             new ArrayList<User>();
@@ -24,39 +26,35 @@ public class AuthService {
             "ADMIN@123";
 
 
-    // ================= PASSWORD MASK =================
+    // ================= PASSWORD INPUT =================
 
     public String readPassword()
     {
-        JFrame frame =
-                new JFrame();
+        Console console =
+                System.console();
 
-        frame.setAlwaysOnTop(true);
-
-        JPasswordField passwordField =
-                new JPasswordField();
-
-        int option =
-                JOptionPane.showConfirmDialog(
-                        frame,
-                        passwordField,
-                        "Enter Password",
-                        JOptionPane.OK_CANCEL_OPTION,
-                        JOptionPane.PLAIN_MESSAGE
-                );
-
-        frame.dispose();
-
-        if(option ==
-                JOptionPane.OK_OPTION)
+        // CMD / Terminal
+        if(console != null)
         {
+            char[] passwordArray =
+                    console.readPassword(
+                            "Enter Password : "
+                    );
+
             return new String(
-                    passwordField.getPassword()
+                    passwordArray
             );
         }
 
-        return "";
+        // Eclipse fallback
+        System.out.print(
+                "Enter Password : "
+        );
+
+        return sc.nextLine();
     }
+
+
     // ================= REGISTER =================
 
     public void register()
@@ -150,19 +148,63 @@ public class AuthService {
             break;
         }
 
-
         // ================= PASSWORD =================
 
-        String password =
-                readPassword();
+        String password = "";
 
+        while(true)
+        {
+            password =
+                    readPassword();
+
+            if(ValidationUtil
+                    .isValidPassword(
+                            password))
+            {
+                break;
+            }
+
+            System.out.println(
+                    "\nInvalid Password!"
+            );
+
+            System.out.println(
+                    "Password must contain:"
+            );
+
+            System.out.println(
+                    "1 Uppercase Letter"
+            );
+
+            System.out.println(
+                    "1 Lowercase Letter"
+            );
+
+            System.out.println(
+                    "1 Number"
+            );
+
+            System.out.println(
+                    "1 Special Character"
+            );
+
+            System.out.println(
+                    "Minimum 8 Characters"
+            );
+        }
+
+        // Encrypt Password
         String encryptedPassword =
                 PasswordUtil.encryptPassword(
                         password
                 );
+        
+        System.out.println(
+                "Encrypted Password : "
+                + encryptedPassword
+        );
 
-
-        // ================= CUSTOMER REGISTER =================
+        // ================= CUSTOMER =================
 
         if(choice == 1)
         {
@@ -192,8 +234,7 @@ public class AuthService {
             );
         }
 
-
-        // ================= ADMIN REGISTER =================
+        // ================= ADMIN =================
 
         else if(choice == 2)
         {
@@ -324,4 +365,3 @@ public class AuthService {
         }
     }
 }
-
