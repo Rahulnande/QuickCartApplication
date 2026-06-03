@@ -1,0 +1,47 @@
+=====================================
+       QUICKCART CUSTOMER INVOICE
+=====================================
+Customer Name : rahul
+Username : rahul
+Order ID : ORD7092
+Product Name : iphone
+Product ID : PRO326
+Category : Mobile
+Brand : apple
+Quantity : 2
+Total Amount : ₹118000.0
+Payment Method : GPAY
+Order Status : PLACED
+Tracking Status : ORDER PLACED
+Expected Delivery : 3 Days
+
+Thank You For Shopping With QuickCart=====================================
+       QUICKCART CUSTOMER INVOICE
+=====================================
+Customer Name : rahul
+Username : rahul
+Order ID : ORD2627
+Product Name : acer
+Product ID : PRO3
+Category : Laptop
+Brand : dell
+Quantity : 1
+Total Amount : ₹35400.0
+Payment Method : GPAY
+Order Status : PLACED
+Tracking Status : ORDER PLACED
+Expected Delivery : 3 Days
+
+Thank You For Shopping With QuickCart=====================================
+       QUICKCART CUSTOMER INVOICE
+=====================================
+Order ID : ORD2627
+Product Name : acer
+Quantity : 1
+Total Amount : ₹35400.0
+Order Status : RETURNED
+Tracking Status : ORDER PLACED
+Expected Delivery : 3 Days
+
+Return Status : COMPLETED
+Refund Processing : SUCCESS

@@ -1,0 +1,11 @@
+=====================================
+      QUICKCART SHOPKEEPER RECORD
+=====================================
+Customer Name : rahul
+Username : rahul
+Order ID : ORD2627
+Product Name : acer
+Quantity : 1
+Total Sale : ₹35400.0
+Payment Method : GPAY
+Order Status : PLACED

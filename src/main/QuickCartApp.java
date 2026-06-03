@@ -123,80 +123,98 @@ public class QuickCartApp {
 
     public static void adminMenu()
     {
-        while(true)
-        {
-            System.out.println(
-                    "\n========= ADMIN PANEL ========="
-            );
+    	
 
-            System.out.println(
-                    "1. Add Product"
-            );
+    	boolean adminLoggedIn =
+    	        true;
 
-            System.out.println(
-                    "2. View Products"
-            );
+    	while(adminLoggedIn)
+    	{
+    	    System.out.println(
+    	            "\n========= ADMIN PANEL ========="
+    	    );
 
-            System.out.println(
-                    "3. Update Product"
-            );
-            
-            System.out.println(
-                    "4. Delete Product"
-            );
+    	    System.out.println(
+    	            "1. Add Product"
+    	    );
 
-            System.out.println(
-                    "5. Manage Orders"
-            );
+    	    System.out.println(
+    	            "2. View Products"
+    	    );
 
-            System.out.println(
-                    "6. Logout"
-            );
+    	    System.out.println(
+    	            "3. Update Product"
+    	    );
 
-            System.out.print(
-                    "Enter Choice : "
-            );
+    	    System.out.println(
+    	            "4. Delete Product"
+    	    );
 
-            int choice =
-                    Integer.parseInt(
-                            sc.nextLine()
-                    );
+    	    System.out.println(
+    	            "5. Manage Orders"
+    	    );
 
-            switch(choice)
-            {
-            case 1:
-                productService.addProduct();
-                break;
+    	    System.out.println(
+    	            "6. Search Invoice"
+    	    );
 
-            case 2:
-                productService.viewProducts();
-                break;
+    	    System.out.println(
+    	            "7. Logout"
+    	    );
 
-            case 3:
-                productService.updateProduct();
-                break;
+    	    System.out.print(
+    	            "Enter Choice : "
+    	    );
 
-            case 4:
-                productService.deleteProduct();
-                break;
+    	    int choice =
+    	            Integer.parseInt(
+    	                    sc.nextLine()
+    	            );
 
-            case 5:
-                productService.manageOrders();
-                break;
+    	    switch(choice)
+    	    {
+    	        case 1:
+    	            productService.addProduct();
+    	            break;
 
-            case 6:
-                System.out.println(
-                        "Admin Logout Successful"
-                );
-                return;
+    	        case 2:
+    	            productService.viewProducts();
+    	            break;
 
-                default:
+    	        case 3:
+    	            productService.updateProduct();
+    	            break;
 
-                    System.out.println(
-                            "Invalid Choice"
-                    );
-            }
-        }
+    	        case 4:
+    	            productService.deleteProduct();
+    	            break;
+
+    	        case 5:
+    	            productService.manageOrders();
+    	            break;
+
+    	        case 6:
+    	            productService.searchInvoiceByOrderId();
+    	            break;
+
+    	        case 7:
+
+    	            System.out.println(
+    	                    "Admin Logout Successful"
+    	            );
+
+    	            adminLoggedIn =
+    	                    false;
+
+    	            break;
+
+    	        default:
+
+    	            System.out.println(
+    	                    "Invalid Choice"
+    	            );
+    	    }
+    	}
     }
 
     // ================= CUSTOMER MENU =================
@@ -204,7 +222,10 @@ public class QuickCartApp {
  public static void customerMenu(
         User user)
 {
-    while(true)
+	 boolean customerLoggedIn =
+		        true;
+
+	while(customerLoggedIn)
     {
         System.out.println(
                 "\n========= CUSTOMER PANEL ========="
@@ -283,10 +304,7 @@ public class QuickCartApp {
                 break;
 
             case 4:
-
-                productService
-                        .buyProduct();
-
+                productService.buyProduct(user);
                 break;
 
             case 5:
@@ -297,17 +315,12 @@ public class QuickCartApp {
                 break;
 
             case 6:
-
-            	productService
-                .cancelOrder();
-        break;
+                productService.cancelOrder(user);
+                break;
 
             case 7:
-
-            	productService
-                .returnOrder();
-
-        break;
+                productService.returnOrder(user);
+                break;
 
             case 8:
 
@@ -321,9 +334,11 @@ public class QuickCartApp {
                 System.out.println(
                         "Customer Logout Successful"
                 );
+                
+                customerLoggedIn =
+                        false;
 
-                return;
-
+                break;
             default:
 
                 System.out.println(

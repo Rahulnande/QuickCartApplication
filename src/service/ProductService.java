@@ -1,9 +1,14 @@
 package service;
 
+import java.io.FileWriter;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.io.FileReader;
+import java.io.BufferedReader;
 
 import model.Product;
+import model.User;
 import model.Cart;
 import model.Order;
 public class ProductService {
@@ -562,163 +567,173 @@ public class ProductService {
     
    //Buy Product
     
-    public void buyProduct()
+    public void buyProduct(
+            User currentUser)
+{
+    if(cartList.isEmpty())
     {
-        if(cartList.isEmpty())
-        {
-            System.out.println(
-                    "\nCart Is Empty"
-            );
-            return;
-        }
-
-        // Show Cart First
-        viewCart();
-
-        System.out.print(
-                "\nEnter Product ID To Buy : "
-        );
-
-        String productId =
-                sc.nextLine();
-
-        Cart selectedCart = null;
-
-        for(Cart cart : cartList)
-        {
-            if(cart.getProduct()
-                    .getProductId()
-                    .equalsIgnoreCase(
-                            productId))
-            {
-                selectedCart = cart;
-                break;
-            }
-        }
-
-        if(selectedCart == null)
-        {
-            System.out.println(
-                    "Invalid Product ID"
-            );
-            return;
-        }
-
-        // Payment
         System.out.println(
-                "\nChoose Payment Method"
+                "\nCart Is Empty"
         );
 
-        System.out.println(
-                "1. GPay"
-        );
-
-        System.out.println(
-                "2. Credit Card"
-        );
-
-        System.out.println(
-                "3. Cash"
-        );
-
-        System.out.print(
-                "Enter Choice : "
-        );
-
-        int paymentChoice =
-                Integer.parseInt(
-                        sc.nextLine()
-                );
-
-        String paymentMethod =
-                "";
-
-        switch(paymentChoice)
-        {
-            case 1:
-                paymentMethod =
-                        "GPAY";
-                break;
-
-            case 2:
-                paymentMethod =
-                        "CREDIT CARD";
-                break;
-
-            case 3:
-
-                System.out.println(
-                        "\nCash On Delivery Not Allowed"
-                );
-                return;
-
-            default:
-
-                System.out.println(
-                        "Invalid Payment Method"
-                );
-                return;
-        }
-
-        Product product =
-                selectedCart.getProduct();
-
-        int quantity =
-                selectedCart.getQuantity();
-
-        // Stock check during buy
-        if(quantity >
-                product.getStock())
-        {
-            System.out.println(
-                    "Product Out Of Stock"
-            );
-            return;
-        }
-
-        // Reduce stock only after successful payment
-        product.setStock(
-                product.getStock()
-                - quantity
-        );
-
-        String orderId =
-                "ORD" +
-                (int)(
-                        Math.random()
-                        * 10000
-                );
-
-        Order order =
-                new Order(
-                        orderId,
-                        product,
-                        quantity,
-                        selectedCart.getTotalPrice(),
-                        "PLACED",
-                        "ORDER PLACED",
-                        3
-                );
-
-        orderList.add(order);
-
-        // Remove only purchased item
-        cartList.remove(
-                selectedCart
-        );
-
-        System.out.println(
-                "\nOrder Placed Successfully"
-                +
-                "\nOrder ID : "
-                + orderId
-                +
-                "\nPayment Method : "
-                + paymentMethod
-                +
-                "\nExpected Delivery : 3 Days"
-        );
+        return;
     }
+
+    System.out.print(
+            "\nEnter Product ID To Buy : "
+    );
+
+    String productId =
+            sc.nextLine();
+
+    Cart selectedCart =
+            null;
+
+    // Search product in cart
+    for(Cart cart : cartList)
+    {
+        if(cart.getProduct()
+                .getProductId()
+                .equalsIgnoreCase(
+                        productId))
+        {
+            selectedCart =
+                    cart;
+
+            break;
+        }
+    }
+
+    if(selectedCart == null)
+    {
+        System.out.println(
+                "Product Not Found In Cart"
+        );
+
+        return;
+    }
+
+    // Payment Method
+    System.out.println(
+            "\nChoose Payment Method"
+    );
+
+    System.out.println(
+            "1. GPay"
+    );
+
+    System.out.println(
+            "2. Credit Card"
+    );
+
+    System.out.println(
+            "3. Cash"
+    );
+
+    System.out.print(
+            "Enter Choice : "
+    );
+
+    int paymentChoice =
+            Integer.parseInt(
+                    sc.nextLine()
+            );
+
+    String paymentMethod =
+            "";
+
+    switch(paymentChoice)
+    {
+        case 1:
+
+            paymentMethod =
+                    "GPAY";
+
+            break;
+
+        case 2:
+
+            paymentMethod =
+                    "CREDIT CARD";
+
+            break;
+
+        case 3:
+
+            System.out.println(
+                    "\nCash On Delivery Not Allowed"
+            );
+
+            return;
+
+        default:
+
+            System.out.println(
+                    "Invalid Payment Method"
+            );
+
+            return;
+    }
+
+    String orderId =
+            "ORD" +
+            (int)(
+                    Math.random()
+                    * 10000
+            );
+
+    Order order =
+            new Order(
+                    orderId,
+                    selectedCart.getProduct(),
+                    selectedCart.getQuantity(),
+                    selectedCart.getTotalPrice(),
+                    "PLACED",
+                    "ORDER PLACED",
+                    3
+            );
+
+    orderList.add(
+            order
+    );
+    
+    generateCustomerInvoice(
+            order,
+            paymentMethod,
+            currentUser.getFullName(),
+            currentUser.getUsername()
+    );
+
+    generateShopkeeperInvoice(
+            order,
+            paymentMethod,
+            currentUser.getFullName(),
+            currentUser.getUsername()
+    );
+
+    // Remove only purchased product from cart
+    cartList.remove(
+            selectedCart
+    );
+
+    System.out.println(
+            "\nOrder Placed Successfully"
+    );
+
+    System.out.println(
+            "Order ID : "
+            + orderId
+    );
+
+    System.out.println(
+            "Payment Method : "
+            + paymentMethod
+    );
+
+    System.out.println(
+            "Expected Delivery : 3 Days"
+    );
+}
     
     //View Order
     
@@ -754,7 +769,7 @@ public class ProductService {
     
     double quickCartWallet =0;
             
-    public void cancelOrder()
+    public void cancelOrder(User currentUser)
     {
         if(orderList.isEmpty())
         {
@@ -797,6 +812,11 @@ public class ProductService {
                 order.setOrderStatus(
                         "CANCELLED"
                 );
+                
+                updateInvoiceStatus(
+                        order,
+                        currentUser.getUsername()
+                );
 
                 // Restore stock
                 Product product =
@@ -836,7 +856,7 @@ public class ProductService {
     
     //Return Order
     
-    public void returnOrder()
+    public void returnOrder(User currentUser)
     {
         if(orderList.isEmpty())
         {
@@ -890,6 +910,11 @@ public class ProductService {
                 // Update status
                 order.setOrderStatus(
                         "RETURNED"
+                );
+                
+                updateInvoiceStatus(
+                        order,
+                        currentUser.getUsername()
                 );
 
                 // Restore stock
@@ -1068,6 +1093,8 @@ public class ProductService {
 
         Order foundOrder =
                 null;
+        
+        
 
         // Find Order
         for(Order order : orderList)
@@ -1091,6 +1118,28 @@ public class ProductService {
 
             return;
         }
+        if(foundOrder.getOrderStatus()
+                .equalsIgnoreCase(
+                        "CANCELLED"))
+        {
+            System.out.println(
+                    "Cancelled Order Cannot Be Updated"
+            );
+
+            return;
+        }
+
+        if(foundOrder.getOrderStatus()
+                .equalsIgnoreCase(
+                        "RETURNED"))
+        {
+            System.out.println(
+                    "Returned Order Cannot Be Updated"
+            );
+
+            return;
+        }
+        
 
         // Status Update Menu
         System.out.println(
@@ -1149,15 +1198,111 @@ public class ProductService {
 
             case 4:
 
-                foundOrder
-                        .setTrackingStatus(
-                                "DELIVERED"
-                        );
+                foundOrder.setTrackingStatus(
+                        "DELIVERED"
+                );
 
-                foundOrder
-                        .setOrderStatus(
-                                "DELIVERED"
-                        );
+                foundOrder.setOrderStatus(
+                        "DELIVERED"
+                );
+
+                // ================= GENERATE INVOICE =================
+
+                try
+                {
+                    FileWriter writer =
+                            new FileWriter(
+                                    "Invoice_"
+                                    + foundOrder.getOrderId()
+                                    + ".txt"
+                            );
+
+                    writer.write(
+                            "========= QUICKCART INVOICE =========\n"
+                    );
+
+                    writer.write(
+                            "Order ID : "
+                            + foundOrder.getOrderId()
+                            + "\n"
+                    );
+
+                    writer.write(
+                            "Product Name : "
+                            + foundOrder
+                            .getProduct()
+                            .getProductName()
+                            + "\n"
+                    );
+
+                    writer.write(
+                            "Category : "
+                            + foundOrder
+                            .getProduct()
+                            .getCategory()
+                            + "\n"
+                    );
+
+                    writer.write(
+                            "Brand : "
+                            + foundOrder
+                            .getProduct()
+                            .getBrand()
+                            + "\n"
+                    );
+
+                    writer.write(
+                            "Quantity : "
+                            + foundOrder.getQuantity()
+                            + "\n"
+                    );
+
+                    writer.write(
+                            "Total Amount : ₹"
+                            + foundOrder.getTotalAmount()
+                            + "\n"
+                    );
+
+                    writer.write(
+                            "Order Status : "
+                            + foundOrder.getOrderStatus()
+                            + "\n"
+                    );
+
+                    writer.write(
+                            "Tracking Status : "
+                            + foundOrder.getTrackingStatus()
+                            + "\n"
+                    );
+
+                    writer.write(
+                            "Expected Delivery : "
+                            + foundOrder.getDeliveryDays()
+                            + " Days\n"
+                    );
+
+                    writer.write(
+                            "\nThank You For Shopping With QuickCart"
+                    );
+
+                    writer.close();
+
+                    System.out.println(
+                            "\nInvoice Generated Successfully"
+                    );
+
+                    System.out.println(
+                            "File Name : Invoice_"
+                            + foundOrder.getOrderId()
+                            + ".txt"
+                    );
+                }
+                catch(Exception e)
+                {
+                    System.out.println(
+                            "Invoice Generation Failed"
+                    );
+                }
 
                 break;
 
@@ -1179,5 +1324,436 @@ public class ProductService {
                 + foundOrder
                         .getTrackingStatus()
         );
+        
+   
+        
+    }
+    public void generateCustomerInvoice(
+            Order order,
+            String paymentMethod,
+            String customerName,
+            String username)
+    {
+        try
+        {
+            File folder =
+                    new File(
+                            "customer_invoices"
+                    );
+
+            if(!folder.exists())
+            {
+                folder.mkdir();
+            }
+
+            String fileName =
+                    "customer_invoices/"
+                    + username
+                    + "_invoice.txt";
+
+            FileWriter writer =
+                    new FileWriter(
+                            fileName,
+                            true
+                    );
+
+            writer.write(
+                    "=====================================\n"
+            );
+
+            writer.write(
+                    "       QUICKCART CUSTOMER INVOICE\n"
+            );
+
+            writer.write(
+                    "=====================================\n"
+            );
+
+            writer.write(
+                    "Customer Name : "
+                    + customerName
+                    + "\n"
+            );
+
+            writer.write(
+                    "Username : "
+                    + username
+                    + "\n"
+            );
+
+            writer.write(
+                    "Order ID : "
+                    + order.getOrderId()
+                    + "\n"
+            );
+
+            writer.write(
+                    "Product Name : "
+                    + order.getProduct()
+                    .getProductName()
+                    + "\n"
+            );
+
+            writer.write(
+                    "Product ID : "
+                    + order.getProduct()
+                    .getProductId()
+                    + "\n"
+            );
+
+            writer.write(
+                    "Category : "
+                    + order.getProduct()
+                    .getCategory()
+                    + "\n"
+            );
+
+            writer.write(
+                    "Brand : "
+                    + order.getProduct()
+                    .getBrand()
+                    + "\n"
+            );
+
+            writer.write(
+                    "Quantity : "
+                    + order.getQuantity()
+                    + "\n"
+            );
+
+            writer.write(
+                    "Total Amount : ₹"
+                    + order.getTotalAmount()
+                    + "\n"
+            );
+
+            writer.write(
+                    "Payment Method : "
+                    + paymentMethod
+                    + "\n"
+            );
+
+            writer.write(
+                    "Order Status : "
+                    + order.getOrderStatus()
+                    + "\n"
+            );
+
+            writer.write(
+                    "Tracking Status : "
+                    + order.getTrackingStatus()
+                    + "\n"
+            );
+
+            writer.write(
+                    "Expected Delivery : "
+                    + order.getDeliveryDays()
+                    + " Days\n"
+            );
+
+            writer.write(
+                    "\nThank You For Shopping With QuickCart"
+            );
+
+            writer.close();
+
+            System.out.println(
+                    "\nCustomer Invoice Generated"
+            );
+        }
+        catch(Exception e)
+        {
+            System.out.println(
+                    "Customer Invoice Failed"
+            );
+        }
+    }
+    
+    public void generateShopkeeperInvoice(
+            Order order,
+            String paymentMethod,
+            String customerName,
+            String username)
+    {
+        try
+        {
+            File folder =
+                    new File(
+                            "shopkeeper_invoices"
+                    );
+
+            if(!folder.exists())
+            {
+                folder.mkdir();
+            }
+
+            String fileName =
+                    "shopkeeper_invoices/"
+                    + "shopkeeper_invoice_"
+                    + order.getOrderId()
+                    + ".txt";
+
+            FileWriter writer =
+                    new FileWriter(
+                            fileName,
+                            true
+                    );
+
+            writer.write(
+                    "=====================================\n"
+            );
+
+            writer.write(
+                    "      QUICKCART SHOPKEEPER RECORD\n"
+            );
+
+            writer.write(
+                    "=====================================\n"
+            );
+
+            writer.write(
+                    "Customer Name : "
+                    + customerName
+                    + "\n"
+            );
+
+            writer.write(
+                    "Username : "
+                    + username
+                    + "\n"
+            );
+
+            writer.write(
+                    "Order ID : "
+                    + order.getOrderId()
+                    + "\n"
+            );
+
+            writer.write(
+                    "Product Name : "
+                    + order.getProduct()
+                    .getProductName()
+                    + "\n"
+            );
+
+            writer.write(
+                    "Quantity : "
+                    + order.getQuantity()
+                    + "\n"
+            );
+
+            writer.write(
+                    "Total Sale : ₹"
+                    + order.getTotalAmount()
+                    + "\n"
+            );
+
+            writer.write(
+                    "Payment Method : "
+                    + paymentMethod
+                    + "\n"
+            );
+
+            writer.write(
+                    "Order Status : "
+                    + order.getOrderStatus()
+                    + "\n"
+            );
+
+            writer.close();
+
+            System.out.println(
+                    "Shopkeeper Invoice Generated"
+            );
+        }
+        catch(Exception e)
+        {
+            System.out.println(
+                    "Shopkeeper Invoice Failed"
+            );
+        }
+    }
+    
+    public void updateInvoiceStatus(
+            Order order,
+            String username)
+    {
+        try
+        {
+        	String fileName =
+        	        "customer_invoices/"
+        	        + username
+        	        + "_invoice.txt";
+
+        	FileWriter writer =
+        	        new FileWriter(
+        	                fileName,
+        	                true
+        	        );
+
+            writer.write(
+                    "=====================================\n"
+            );
+
+            writer.write(
+                    "       QUICKCART CUSTOMER INVOICE\n"
+            );
+
+            writer.write(
+                    "=====================================\n"
+            );
+
+            writer.write(
+                    "Order ID : "
+                    + order.getOrderId()
+                    + "\n"
+            );
+
+            writer.write(
+                    "Product Name : "
+                    + order.getProduct()
+                    .getProductName()
+                    + "\n"
+            );
+
+            writer.write(
+                    "Quantity : "
+                    + order.getQuantity()
+                    + "\n"
+            );
+
+            writer.write(
+                    "Total Amount : ₹"
+                    + order.getTotalAmount()
+                    + "\n"
+            );
+
+            writer.write(
+                    "Order Status : "
+                    + order.getOrderStatus()
+                    + "\n"
+            );
+
+            writer.write(
+                    "Tracking Status : "
+                    + order.getTrackingStatus()
+                    + "\n"
+            );
+
+            writer.write(
+                    "Expected Delivery : "
+                    + order.getDeliveryDays()
+                    + " Days\n"
+            );
+
+            // extra messages
+            if(order.getOrderStatus()
+                    .equalsIgnoreCase(
+                            "CANCELLED"))
+            {
+                writer.write(
+                        "\nRefund Status : SUCCESS"
+                );
+
+                writer.write(
+                        "\nRefund Added To QuickCart Wallet"
+                );
+            }
+
+            if(order.getOrderStatus()
+                    .equalsIgnoreCase(
+                            "RETURNED"))
+            {
+                writer.write(
+                        "\nReturn Status : COMPLETED"
+                );
+
+                writer.write(
+                        "\nRefund Processing : SUCCESS"
+                );
+            }
+
+            writer.close();
+
+            System.out.println(
+                    "Invoice Updated Successfully"
+            );
+        }
+
+        catch(Exception e)
+        {
+            System.out.println(
+                    "Invoice Update Failed"
+            );
+        }
+    }
+    public void searchInvoiceByOrderId()
+    {
+        System.out.println(
+                "\n========= SEARCH INVOICE ========="
+        );
+
+        System.out.print(
+                "Enter Order ID : "
+        );
+
+        String orderId =
+                sc.nextLine();
+
+        String fileName =
+                "shopkeeper_invoices/"
+                + "shopkeeper_invoice_"
+                + orderId
+                + ".txt";
+
+        File file =
+                new File(
+                        fileName
+                );
+
+        if(!file.exists())
+        {
+            System.out.println(
+                    "Invoice Not Found"
+            );
+
+            return;
+        }
+
+        try
+        {
+            BufferedReader reader =
+                    new BufferedReader(
+                            new FileReader(
+                                    fileName
+                            )
+                    );
+
+            String line;
+
+            System.out.println(
+                    "\n========= INVOICE DETAILS ========="
+            );
+
+            while(
+                    (line =
+                            reader.readLine())
+                            != null
+            )
+            {
+                System.out.println(
+                        line
+                );
+            }
+
+            reader.close();
+        }
+
+        catch(Exception e)
+        {
+            System.out.println(
+                    "Error Reading Invoice"
+            );
+        }
     }
 }
