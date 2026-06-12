@@ -1,4 +1,4 @@
-package util;
+package com.project.quickcart.util;
 
 public class ValidationUtil {
 	

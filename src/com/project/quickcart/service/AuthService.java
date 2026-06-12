@@ -1,14 +1,14 @@
-package service;
+package com.project.quickcart.service;
 
 import java.io.Console;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import model.Admin;
-import model.Customer;
-import model.User;
-import util.PasswordUtil;
-import util.ValidationUtil;
+import com.project.quickcart.model.Admin;
+import com.project.quickcart.model.Customer;
+import com.project.quickcart.model.User;
+import com.project.quickcart.util.PasswordUtil;
+import com.project.quickcart.util.ValidationUtil;
 
 public class AuthService {
 
@@ -97,12 +97,19 @@ public class AuthService {
 
         while(true)
         {
-            System.out.print(
-                    "Enter Username : "
-            );
+        	System.out.print(
+        	        "Enter Username : "
+        	);
 
-            username =
-                    sc.nextLine();
+        	 username =sc.nextLine();
+
+        	if(!username.equals(
+        	        username.toLowerCase()))
+        	{
+        	    System.out.println("Username Must Be In Lowercase Only");
+
+        	    return;
+        	}
 
             if(!ValidationUtil
                     .isValidUsername(
@@ -303,7 +310,8 @@ public class AuthService {
         );
 
         String username =
-                sc.nextLine();
+                sc.nextLine()
+                .toLowerCase();
 
         String password =
                 readPassword();

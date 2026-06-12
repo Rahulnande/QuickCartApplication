@@ -1,4 +1,4 @@
-package service;
+package com.project.quickcart.service;
 
 public class MaskingThread extends Thread
 {

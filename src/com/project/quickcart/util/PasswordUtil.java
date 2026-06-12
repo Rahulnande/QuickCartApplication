@@ -1,4 +1,4 @@
-package util;
+package com.project.quickcart.util;
 
 import java.security.MessageDigest;
 

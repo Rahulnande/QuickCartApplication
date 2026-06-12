@@ -1,16 +1,17 @@
-package service;
+package com.project.quickcart.service;
 
 import java.io.FileWriter;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import com.project.quickcart.model.Cart;
+import com.project.quickcart.model.Order;
+import com.project.quickcart.model.Product;
+import com.project.quickcart.model.User;
+
 import java.io.FileReader;
 import java.io.BufferedReader;
-
-import model.Product;
-import model.User;
-import model.Cart;
-import model.Order;
 public class ProductService {
 
     private Scanner sc;

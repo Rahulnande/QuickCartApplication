@@ -1,4 +1,4 @@
-package model;
+package com.project.quickcart.model;
 
 public class User {
 
