@@ -1,0 +1,11 @@
+=====================================
+      QUICKCART SHOPKEEPER RECORD
+=====================================
+Customer Name : rahul
+Username : rahul
+Order ID : ORD1541
+Product Name : acer
+Quantity : 2
+Total Sale : ₹118000.0
+Payment Method : GPAY
+Order Status : PLACED
