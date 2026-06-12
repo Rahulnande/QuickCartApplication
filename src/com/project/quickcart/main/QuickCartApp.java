@@ -14,14 +14,10 @@ public class QuickCartApp {
 
     static Scanner sc =new Scanner(System.in);
 
-    //static AuthService authService =new AuthService();
-
-    static AuthService authService =
-            new AuthService(sc);
+    static AuthService authService =new AuthService(sc);
     
-    static ProductService
-    productService =
-    new ProductService(sc);
+    static ProductService productService = new ProductService(sc);
+   
     
     
     public static void main(String[] args) {
@@ -29,10 +25,7 @@ public class QuickCartApp {
         while(true)
         {
             try {
-            	
-            	
-            	
-
+       
                 System.out.println(
                         "\n********* WELCOME TO QUICKCART *********"
                 );
@@ -50,7 +43,11 @@ public class QuickCartApp {
                 );
 
                 System.out.println(
-                        "3. Exit"
+                        "3. Forgot Password"
+                );
+
+                System.out.println(
+                        "4. Exit"
                 );
 
                 System.out.println(
@@ -63,6 +60,8 @@ public class QuickCartApp {
 
                 int choice =Integer.parseInt(sc.nextLine());
 
+
+                
                 switch(choice)
                 {
                     case 1:
@@ -72,11 +71,11 @@ public class QuickCartApp {
 
                     case 2:
 
-                        User loggedInUser = authService.login();
+                        User loggedInUser =
+                                authService.login();
 
                         if(loggedInUser != null)
                         {
-                            // Role Based Login
                             if(loggedInUser
                                     .getRole()
                                     .equalsIgnoreCase(
@@ -100,11 +99,19 @@ public class QuickCartApp {
 
                     case 3:
 
+                        authService
+                                .forgotPassword();
+
+                        break;
+
+                    case 4:
+
                         System.out.println(
                                 "\nThank You For Using QuickCart"
                         );
 
                         System.exit(0);
+
                         break;
 
                     default:
@@ -115,10 +122,12 @@ public class QuickCartApp {
                 }
             }
 
+
             catch(Exception e)
             {
                 System.out.println(
-                        "Enter Valid Number"
+                        "Error : "
+                        + e.getMessage()
                 );
             }
         }
@@ -126,7 +135,7 @@ public class QuickCartApp {
 
     // ================= ADMIN MENU =================
 
-    public static void adminMenu()
+    public static void adminMenu() throws Exception
     {
     	
 
@@ -224,13 +233,15 @@ public class QuickCartApp {
 
     // ================= CUSTOMER MENU =================
 
- public static void customerMenu(
-        User user)
-{
-	 boolean customerLoggedIn =
-		        true;
 
-	while(customerLoggedIn)
+    
+    public static void customerMenu(User user) throws Exception
+    {
+    boolean customerLoggedIn =
+    true;
+
+  
+    while(customerLoggedIn)
     {
         System.out.println(
                 "\n========= CUSTOMER PANEL ========="
@@ -272,8 +283,16 @@ public class QuickCartApp {
         System.out.println(
                 "8. Track Order"
         );
+
         System.out.println(
                 "9. Logout"
+        );
+
+        System.out.println(
+                "10. Contact Customer Care"
+        );
+        System.out.println(
+                "11. Wallet Balance"
         );
 
         System.out.print(
@@ -309,7 +328,10 @@ public class QuickCartApp {
                 break;
 
             case 4:
-                productService.buyProduct(user);
+
+                productService
+                        .buyProduct(user);
+
                 break;
 
             case 5:
@@ -320,11 +342,17 @@ public class QuickCartApp {
                 break;
 
             case 6:
-                productService.cancelOrder(user);
+
+                productService
+                        .cancelOrder(user);
+
                 break;
 
             case 7:
-                productService.returnOrder(user);
+
+                productService
+                        .returnOrder(user);
+
                 break;
 
             case 8:
@@ -339,17 +367,28 @@ public class QuickCartApp {
                 System.out.println(
                         "Customer Logout Successful"
                 );
-                
+
                 customerLoggedIn =
                         false;
 
+                return;
+
+            case 10:
+
+                productService
+                        .contactCustomerCare(user);
+
                 break;
+
             default:
 
                 System.out.println(
                         "Invalid Choice"
                 );
         }
+  
     }
-}
+
+    }
+
 }

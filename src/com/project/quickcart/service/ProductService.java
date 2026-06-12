@@ -10,6 +10,9 @@ import com.project.quickcart.model.Order;
 import com.project.quickcart.model.Product;
 import com.project.quickcart.model.User;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import java.io.FileReader;
 import java.io.BufferedReader;
 public class ProductService {
@@ -35,11 +38,26 @@ public class ProductService {
 
     // ================= ADD PRODUCT =================
 
-    public void addProduct()
+    public void addProduct() throws Exception
     {
         System.out.println(
                 "\n========= ADD PRODUCT ========="
         );
+        System.out.println(
+                "Press 0 To Go Back"
+        );
+
+        System.out.print(
+                "Enter Product Name : "
+        );
+
+        String productName =
+                sc.nextLine();
+
+        if(productName.equals("0"))
+        {
+            return;
+        }
 
         // Random Product ID
         String productId =
@@ -48,12 +66,12 @@ public class ProductService {
                         Math.random() * 10000
                 );
 
-        System.out.print(
-                "Enter Product Name : "
-        );
-
-        String productName =
-                sc.nextLine();
+//        System.out.print(
+//                "Enter Product Name : "
+//        );
+//
+//        String productName =
+//                sc.nextLine();
 
         // ================= CATEGORY =================
 
@@ -176,11 +194,11 @@ public class ProductService {
         productList.add(
                 product
         );
-
         System.out.println(
-                "\nProduct Added Successfully"
+                "\nAdding Product..."
         );
 
+        Thread.sleep(1500);
         System.out.println(
                 "Generated Product ID : "
                 + productId
@@ -234,6 +252,10 @@ public class ProductService {
         System.out.println(
                 "\n========= UPDATE PRODUCT ========="
         );
+        
+        System.out.println(
+                "Press 0 To Go Back"
+        );
 
         System.out.print(
                 "Enter Product ID : "
@@ -241,6 +263,18 @@ public class ProductService {
 
         String productId =
                 sc.nextLine();
+
+        if(productId.equals("0"))
+        {
+            return;
+        }
+
+//        System.out.print(
+//                "Enter Product ID : "
+//        );
+
+//        String productId =
+//                sc.nextLine();
 
         Product foundProduct =
                 null;
@@ -392,12 +426,28 @@ public class ProductService {
                 "\n========= DELETE PRODUCT ========="
         );
 
+//        System.out.print(
+//                "Enter Product ID : "
+//        );
+//
+//        String productId =
+//                sc.nextLine();
+        
+        System.out.println(
+                "Press 0 To Go Back"
+        );
+
         System.out.print(
                 "Enter Product ID : "
         );
 
         String productId =
                 sc.nextLine();
+
+        if(productId.equals("0"))
+        {
+            return;
+        }
 
         Product foundProduct =
                 null;
@@ -451,12 +501,28 @@ public class ProductService {
 
         viewProducts();
 
+//        System.out.print(
+//                "\nEnter Product ID : "
+//        );
+//
+//        String productId =
+//                sc.nextLine();
+        
+        System.out.println(
+                "Press 0 To Go Back"
+        );
+
         System.out.print(
                 "\nEnter Product ID : "
         );
 
         String productId =
                 sc.nextLine();
+
+        if(productId.equals("0"))
+        {
+            return;
+        }
 
         Product foundProduct =
                 null;
@@ -529,6 +595,11 @@ public class ProductService {
     
     public void viewCart()
     {
+    	System.out.println(
+    	        "\nPress 0 To Go Back"
+    	);
+
+    	sc.nextLine();
         if(cartList.isEmpty())
         {
             System.out.println(
@@ -569,7 +640,7 @@ public class ProductService {
    //Buy Product
     
     public void buyProduct(
-            User currentUser)
+            User currentUser) throws Exception
 {
     if(cartList.isEmpty())
     {
@@ -682,6 +753,19 @@ public class ProductService {
                     Math.random()
                     * 10000
             );
+    
+    LocalDateTime now =
+            LocalDateTime.now();
+
+    DateTimeFormatter formatter =
+            DateTimeFormatter.ofPattern(
+                    "dd-MM-yyyy hh:mm a"
+            );
+
+    String orderDateTime =
+            now.format(
+                    formatter
+            );
 
     Order order =
             new Order(
@@ -718,8 +802,24 @@ public class ProductService {
     );
 
     System.out.println(
-            "\nOrder Placed Successfully"
+            "\nProcessing Payment..."
     );
+
+    try
+    {
+        Thread.sleep(2000);
+    }
+    catch(Exception e)
+    {
+    }
+
+    Thread.sleep(2000);
+
+    System.out.println(
+            "Generating Invoice..."
+    );
+
+    Thread.sleep(1500);
 
     System.out.println(
             "Order ID : "
@@ -734,12 +834,21 @@ public class ProductService {
     System.out.println(
             "Expected Delivery : 3 Days"
     );
+    System.out.println(
+            "Order Date & Time : "
+            + orderDateTime
+    );
 }
     
     //View Order
     
     public void viewOrders()
     {
+    	System.out.println(
+    	        "\nPress Enter To Go Back"
+    	);
+
+    	sc.nextLine();
         if(orderList.isEmpty())
         {
             System.out.println(
@@ -976,8 +1085,19 @@ public class ProductService {
                 "\nEnter Order ID : "
         );
 
+//        String orderId =
+//                sc.nextLine();
+        System.out.println(
+                "Press 0 To Go Back"
+        );
+
         String orderId =
                 sc.nextLine();
+
+        if(orderId.equals("0"))
+        {
+            return;
+        }
 
         for(Order order
                 : orderList)
@@ -1085,12 +1205,23 @@ public class ProductService {
             );
         }
 
-        System.out.print(
-                "\nEnter Order ID : "
+//        System.out.print(
+//                "\nEnter Order ID : "
+//        );
+        System.out.println(
+                "Press 0 To Go Back"
         );
 
         String orderId =
                 sc.nextLine();
+
+        if(orderId.equals("0"))
+        {
+            return;
+        }
+
+//        String orderId =
+//                sc.nextLine();
 
         Order foundOrder =
                 null;
@@ -1433,6 +1564,19 @@ public class ProductService {
                     + paymentMethod
                     + "\n"
             );
+            LocalDateTime now =
+                    LocalDateTime.now();
+
+            DateTimeFormatter formatter =
+                    DateTimeFormatter.ofPattern(
+                            "dd-MM-yyyy hh:mm a"
+                    );
+
+            writer.write(
+                    "Order Date & Time : "
+                    + now.format(formatter)
+                    + "\n"
+            );
 
             writer.write(
                     "Order Status : "
@@ -1552,6 +1696,19 @@ public class ProductService {
             writer.write(
                     "Payment Method : "
                     + paymentMethod
+                    + "\n"
+            );
+            LocalDateTime now =
+                    LocalDateTime.now();
+
+            DateTimeFormatter formatter =
+                    DateTimeFormatter.ofPattern(
+                            "dd-MM-yyyy hh:mm a"
+                    );
+
+            writer.write(
+                    "Order Date & Time : "
+                    + now.format(formatter)
                     + "\n"
             );
 
@@ -1698,8 +1855,20 @@ public class ProductService {
                 "Enter Order ID : "
         );
 
+//        String orderId =
+//                sc.nextLine();
+        
+        System.out.println(
+                "Press 0 To Go Back"
+        );
+
         String orderId =
                 sc.nextLine();
+
+        if(orderId.equals("0"))
+        {
+            return;
+        }
 
         String fileName =
                 "shopkeeper_invoices/"
@@ -1757,4 +1926,311 @@ public class ProductService {
             );
         }
     }
+    
+ // ================= CUSTOMER CARE =================
+
+    public void contactCustomerCare(User currentUser)
+    {
+    	System.out.println(
+    	        "Press 0 To Go Back"
+    	);
+
+    	String issue =
+    	        sc.nextLine();
+
+    	if(issue.equals("0"))
+    	{
+    	    return;
+    	}
+        while(true)
+        {
+            System.out.println(
+                    "\n========= QUICKCART CUSTOMER SUPPORT ========="
+            );
+
+            System.out.println(
+                    "1. Call Customer Care"
+            );
+
+            System.out.println(
+                    "2. Raise Complaint Ticket"
+            );
+
+            System.out.println(
+                    "3. Back"
+            );
+
+            System.out.print(
+                    "Enter Choice : "
+            );
+
+            int choice =
+                    Integer.parseInt(
+                            sc.nextLine()
+                    );
+
+            switch(choice)
+            {
+                case 1:
+
+                    System.out.println(
+                            "\n========= CUSTOMER CARE ========="
+                    );
+
+                    System.out.println(
+                            "QuickCart Support Number : 1800-202-5555"
+                    );
+
+                    System.out.println(
+                            "Available Time : 9:00 AM To 9:00 PM"
+                    );
+
+                    System.out.println(
+                            "Thank You For Contacting QuickCart"
+                    );
+
+                    break;
+
+                case 2:
+
+                    raiseComplaint(
+                            currentUser
+                    );
+
+                    break;
+
+                case 3:
+
+                    return;
+
+                default:
+
+                    System.out.println(
+                            "Invalid Choice"
+                    );
+            }
+        }
+    }
+ // ================= RAISE COMPLAINT =================
+
+    public void raiseComplaint(User currentUser)
+    {
+        try
+        {
+            if(orderList.isEmpty())
+            {
+                System.out.println(
+                        "\nNo Orders Found"
+                );
+
+                return;
+            }
+
+            viewOrders();
+
+            System.out.print(
+                    "\nEnter Order ID : "
+            );
+
+            String orderId =
+                    sc.nextLine();
+
+            System.out.println(
+                    "\nSelect Issue Type"
+            );
+
+            System.out.println(
+                    "1. Product Damaged"
+            );
+
+            System.out.println(
+                    "2. Wrong Product Delivered"
+            );
+
+            System.out.println(
+                    "3. Refund Issue"
+            );
+
+            System.out.println(
+                    "4. Payment Issue"
+            );
+
+            System.out.println(
+                    "5. Delivery Delay"
+            );
+
+            System.out.print(
+                    "Enter Choice : "
+            );
+
+            int issueChoice =
+                    Integer.parseInt(
+                            sc.nextLine()
+                    );
+
+            String issueType =
+                    "";
+
+            switch(issueChoice)
+            {
+                case 1:
+                    issueType =
+                            "Product Damaged";
+                    break;
+
+                case 2:
+                    issueType =
+                            "Wrong Product Delivered";
+                    break;
+
+                case 3:
+                    issueType =
+                            "Refund Issue";
+                    break;
+
+                case 4:
+                    issueType =
+                            "Payment Issue";
+                    break;
+
+                case 5:
+                    issueType =
+                            "Delivery Delay";
+                    break;
+
+                default:
+
+                    System.out.println(
+                            "Invalid Choice"
+                    );
+
+                    return;
+            }
+
+            System.out.print(
+                    "Describe Your Problem : "
+            );
+
+            String description =
+                    sc.nextLine();
+
+            String ticketId =
+                    "TIC"
+                    + (int)(
+                            Math.random()
+                            * 10000
+                    );
+
+            FileWriter writer =
+                    new FileWriter(
+                            "complaints.txt",
+                            true
+                    );
+
+            writer.write(
+                    "\n===================================="
+            );
+
+            writer.write(
+                    "\nTicket ID : "
+                    + ticketId
+            );
+
+            writer.write(
+                    "\nCustomer Name : "
+                    + currentUser.getFullName()
+            );
+
+            writer.write(
+                    "\nUsername : "
+                    + currentUser.getUsername()
+            );
+
+            writer.write(
+                    "\nOrder ID : "
+                    + orderId
+            );
+
+            writer.write(
+                    "\nIssue Type : "
+                    + issueType
+            );
+
+            writer.write(
+                    "\nProblem : "
+                    + description
+            );
+
+            writer.write(
+                    "\nStatus : OPEN"
+            );
+
+            writer.write(
+                    "\n====================================\n"
+            );
+
+            writer.close();
+
+            System.out.println(
+                    "\nRegistering Complaint..."
+            );
+
+            Thread.sleep(1500);
+
+            System.out.println(
+                    "Ticket ID : "
+                    + ticketId
+            );
+
+            System.out.println(
+                    "Status : OPEN"
+            );
+
+            System.out.println(
+                    "Our Team Will Contact You Within 24 Hours"
+            );
+        }
+
+        catch(Exception e)
+        {
+            System.out.println(
+                    "Complaint Registration Failed"
+            );
+        }
+    }
+    public void viewWallet()
+    {
+        System.out.println(
+                "\n========= QUICKCART WALLET ========="
+        );
+
+        System.out.println(
+                "Current Wallet Balance : ₹"
+                + quickCartWallet
+        );
+
+        System.out.println(
+                "\nWallet Rules :"
+        );
+
+        System.out.println(
+                "1. Refund Amount Is Added Here"
+        );
+
+        System.out.println(
+                "2. Wallet Amount Cannot Be Withdrawn"
+        );
+
+        System.out.println(
+                "3. Can Be Used For Future Purchases"
+        );
+
+        System.out.println(
+                "\nPress Enter To Go Back"
+        );
+
+        sc.nextLine();
+    }
+    
+    
 }
